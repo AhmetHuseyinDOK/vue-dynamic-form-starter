@@ -1,0 +1,86 @@
+<template>
+  <div class="relative">
+    <label :for="name" class="text-sm font-semibold text-gray-700">{{
+      title
+    }}</label>
+    <input
+      :name="name"
+      type="text"
+      v-model="searchQuery"
+      @focus="isOpen = true"
+      class="w-full px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+      placeholder="Search..."
+    />
+    <div
+      v-if="isOpen && filteredOptions.length"
+      class="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg"
+    >
+      <ul>
+        <li
+          v-for="option in filteredOptions"
+          :key="option.value"
+          @click="selectOption(option)"
+          class="px-4 py-2 cursor-pointer hover:bg-gray-100"
+        >
+          {{ option.label }}
+        </li>
+      </ul>
+    </div>
+  </div>
+</template>
+  
+  <script lang="ts" setup>
+import { ref, watch, computed } from "vue";
+
+export interface ISelectBoxConfig {
+    options: Array<{ label: string; value: string }>, 
+}
+
+interface ISelectBoxProps extends ISelectBoxConfig{
+  modelValue: string
+  title: string
+  name: string
+}
+
+// Define props with types
+const props = defineProps<ISelectBoxProps>();
+
+// Define emits
+const emit = defineEmits(["update:modelValue"]);
+
+// Reactive state
+const searchQuery = ref(getSelectedOptionFromValue(props.modelValue));
+const isOpen = ref(false);
+
+// Computed property for filtered options
+const filteredOptions = computed(() => {
+  if (!searchQuery.value) return props.options;
+  return props.options.filter((option) =>
+    option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
+// Select option method
+const selectOption = (option: { label: string; value: string }) => {
+  emit("update:modelValue", option.value);
+  searchQuery.value = option.label;
+  isOpen.value = false;
+};
+
+function getSelectedOptionFromValue(value: string): string {
+  return props.options.find((option) => option.value === value)?.label ?? "";
+}
+
+// Watch modelValue for external changes
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    searchQuery.value = getSelectedOptionFromValue(newValue);
+  }
+);
+</script>
+  
+  <style>
+/* Add additional styles if needed */
+</style>
+  
