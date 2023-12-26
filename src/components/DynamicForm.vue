@@ -1,10 +1,14 @@
 <template>
   <form>
     <component
+      class="mt-2"
       v-for="field in form.fields"
       :key="field.name"
       :is="field.component"
       v-bind="field.config"
+      :title="field.title"
+      :name="field.name"
+      :validate="field.validate"
       v-model="modelValue[field.name]"
     ></component>
   </form>
@@ -16,14 +20,26 @@ interface Props {
 }
 
 export interface IFormStructure {
-  fields: IFormField<any>[];
+  fields: IFormField<any,any>[];
 }
 
-export interface IFormField<T> {
-  component: string;
+export interface IBaseProps<T> {
   title: string;
-  config?: T;
   name: string;
+  validate?: (data: T) => string | undefined | null
+}
+
+export interface IComponentProps<T> extends IBaseProps<T>{
+  modelValue: T;
+}
+
+ /**
+  * K stands for Config
+  * V stands for Data
+  */
+export interface IFormField<K,V> extends IBaseProps<V> {
+  component: string;
+  config?: K;
 }
 
 const props = defineProps<Props>();

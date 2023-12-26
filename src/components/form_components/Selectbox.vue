@@ -9,7 +9,7 @@
       v-model="searchQuery"
       @focus="isOpen = true"
       class="w-full px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-      placeholder="Search..."
+      :placeholder="title"
     />
     <div
       v-if="isOpen && filteredOptions.length"
@@ -54,7 +54,7 @@ const isOpen = ref(false);
 
 // Computed property for filtered options
 const filteredOptions = computed(() => {
-  if (!searchQuery.value) return props.options;
+  if (!searchQuery.value || getSelectedOptionFromValue(searchQuery.value) == searchQuery.value) return props.options;
   return props.options.filter((option) =>
     option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
