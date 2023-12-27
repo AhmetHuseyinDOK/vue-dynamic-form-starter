@@ -7,7 +7,7 @@
         v-model="internalModelValue.street"
         class="border p-2 rounded w-full mt-2"
       />
-  
+      <div v-if="err?.street" class="text-sm text-red-800">{{err.street}}</div>
       <label :for="`${name}-city`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - City</label>
       <input
         type="text"
@@ -15,7 +15,7 @@
         v-model="internalModelValue.city"
         class="border p-2 rounded  w-full mt-2"
       />
-  
+      <div v-if="err?.city" class="text-sm text-red-800">{{err.city}}</div>
       <label :for="`${name}-state`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - State</label>
       <input
         type="text"
@@ -23,7 +23,7 @@
         v-model="internalModelValue.state"
         class="border p-2 rounded  w-full mt-2"
       />
-  
+      <div v-if="err?.state" class="text-sm text-red-800">{{err.state}}</div>
       <label :for="`${name}-postal`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - Postal Code</label>
       <input
         type="text"
@@ -31,8 +31,9 @@
         v-model="internalModelValue.postal"
         class="border p-2 rounded  w-full mt-2"
       />
+      <div v-if="err?.postal" class="text-sm text-red-800">{{err.postal}}</div>
     </div>
-    <div v-if="err" class="text-sm text-red-800">{{err}}</div>
+    
   </template>
   
   <script setup lang="ts">
@@ -49,15 +50,21 @@
     state: string;
     postal: string;
   }
-  export type IAddressBoxField = IFormField<IAddressBoxData,IAddressBoxConfig>;
-  const props = defineProps<IComponentProps<IAddressBoxData> & IAddressBoxConfig>();
+  type IAddressBoxError = {
+    street: string;
+    city: string;
+    state: string;
+    postal: string;
+  }
+  export type IAddressBoxField = IFormField<IAddressBoxData,IAddressBoxConfig, IAddressBoxError>;
+  const props = defineProps<IComponentProps<IAddressBoxData,IAddressBoxError> & IAddressBoxConfig>();
   
   const internalModelValue = ref(props.modelValue ?? {});
   
   // Define emits
   const emit = defineEmits(["update:modelValue"]);
   
-  const err = ref();
+  const err = ref<IAddressBoxError>();
 
   // Emit updates when any part of the address changes
   watch(internalModelValue, (newValue) => {

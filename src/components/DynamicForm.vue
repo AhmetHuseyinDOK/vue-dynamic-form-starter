@@ -20,25 +20,25 @@ interface Props {
 }
 
 export interface IFormStructure {
-  fields: IFormField<any,any>[];
+  fields: IFormField<any,any, any>[];
 }
 
-interface IBaseProps<T> {
+interface IBaseProps<T, Error> {
   title?: string;
   name: string;
-  validate?: (data: T) => string | undefined | null
+  validate?: (data: T) => Error | undefined
 }
 
 
-export type IComponentProps<Data> = IBaseProps<Data> & {
+export type IComponentProps<Data,Error> = IBaseProps<Data,Error> & {
   modelValue: Data;
 }
 
-export interface IFormField<Data,Config> extends IBaseProps<Data> {
+export interface IFormField<Data,Config,Error> extends IBaseProps<Data,Error> {
   component: string;
   config?: Config;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 
 </script>

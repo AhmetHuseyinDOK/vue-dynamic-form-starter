@@ -22,8 +22,9 @@
     options: Array<{ label: string; value: string }>;
   }
   type ISelectBoxData = string;
-  export type ISelectBoxField = IFormField<ISelectBoxData, IRadioBoxConfig> 
-  const props = defineProps<IComponentProps<ISelectBoxData> & IRadioBoxConfig> ();
+  type ISelectBoxError = string;
+  export type ISelectBoxField = IFormField<ISelectBoxData, IRadioBoxConfig, ISelectBoxError> 
+  const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & IRadioBoxConfig> ();
   
   const internalModelValue = ref(props.modelValue);
   

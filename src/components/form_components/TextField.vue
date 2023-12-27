@@ -19,8 +19,9 @@ import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
 type ITextFieldData = string;
 type ITextFieldConfig = {};
-export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig> 
-const props = defineProps<IComponentProps<ITextFieldData> & ITextFieldConfig>();
+type ITextFieldError = string;
+export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig,ITextFieldError > 
+const props = defineProps<IComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue"]);

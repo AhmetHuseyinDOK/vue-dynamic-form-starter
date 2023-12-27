@@ -81,8 +81,11 @@ const form: IFormStructure = {
       name: "address",
       title: "Full Address",
       validate(data) {
-        if(!(data.city && data.postal && data.state && data.street)){
-          return "cannot be empty"
+        return  {
+          city: data.city == null ?  "City cannot be null" : null,
+          state: data.state == null ?  "State cannot be null" : null,
+          street: data.street == null ?  "Street cannot be null" : null,
+          postal: data.postal == null ? "Postal cannot  be null" :  isNaN(parseInt(data.postal)) ? "Postal code must be a number" : null
         }
       },
     } as IAddressBoxField,

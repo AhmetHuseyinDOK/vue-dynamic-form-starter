@@ -37,8 +37,9 @@ export interface ISelectBoxConfig  {
     options: Array<{ label: string; value: string }>, 
 }
 type ISelectBoxData = string;
-export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig>
-const props = defineProps<IComponentProps<ISelectBoxData> & ISelectBoxConfig>();
+type ISelectBoxError = string;
+export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig, ISelectBoxError>
+const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & ISelectBoxConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue"]);
