@@ -16,16 +16,13 @@
   
   <script setup lang="ts">
   import { defineProps, watch, ref } from 'vue';
+  import type { IComponentProps } from '../DynamicForm.vue';
   
   interface IRadioBoxConfig {
     options: Array<{ label: string; value: string }>;
   }
   
-  interface ISelectBoxProps extends IRadioBoxConfig {
-    modelValue: string;
-    title: string;
-    name: string;
-  }
+  type ISelectBoxProps = IComponentProps<string> & IRadioBoxConfig 
   
   const props = defineProps<ISelectBoxProps>();
   

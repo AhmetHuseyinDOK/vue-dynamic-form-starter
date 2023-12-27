@@ -73,6 +73,11 @@ const form: IFormStructure = {
         return !isNaN(years) && years >= 0 ? null : 'Invalid number of years';
       },
     },
+    {
+      component: "AddressBox",
+      name: "address",
+      title: "Full Address",
+    },
 
     // // Additional Details
     // {
@@ -92,7 +97,6 @@ const data = ref({
   name: "ahmet",
   gender: "male"
 });
-
 </script>
 
 <template>

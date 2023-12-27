@@ -24,7 +24,7 @@ export interface IFormStructure {
 }
 
 export interface IBaseProps<T> {
-  title: string;
+  title?: string;
   name: string;
   validate?: (data: T) => string | undefined | null
 }

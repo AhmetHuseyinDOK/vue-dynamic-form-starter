@@ -31,16 +31,13 @@
   
   <script lang="ts" setup>
 import { ref, watch, computed } from "vue";
+import type { IComponentProps } from "../DynamicForm.vue";
 
-export interface ISelectBoxConfig {
+export interface ISelectBoxConfig  {
     options: Array<{ label: string; value: string }>, 
 }
 
-interface ISelectBoxProps extends ISelectBoxConfig{
-  modelValue: string
-  title: string
-  name: string
-}
+type ISelectBoxProps = IComponentProps<string> & ISelectBoxConfig 
 
 // Define props with types
 const props = defineProps<ISelectBoxProps>();
