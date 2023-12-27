@@ -23,23 +23,20 @@ export interface IFormStructure {
   fields: IFormField<any,any>[];
 }
 
-export interface IBaseProps<T> {
+interface IBaseProps<T> {
   title?: string;
   name: string;
   validate?: (data: T) => string | undefined | null
 }
 
-export interface IComponentProps<T> extends IBaseProps<T>{
-  modelValue: T;
+
+export type IComponentProps<Data> = IBaseProps<Data> & {
+  modelValue: Data;
 }
 
- /**
-  * K stands for Config
-  * V stands for Data
-  */
-export interface IFormField<K,V> extends IBaseProps<V> {
+export interface IFormField<Data,Config> extends IBaseProps<Data> {
   component: string;
-  config?: K;
+  config?: Config;
 }
 
 const props = defineProps<Props>();

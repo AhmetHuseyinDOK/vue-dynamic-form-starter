@@ -32,32 +32,36 @@
         class="border p-2 rounded  w-full mt-2"
       />
     </div>
+    <div v-if="err" class="text-sm text-red-800">{{err}}</div>
   </template>
   
   <script setup lang="ts">
   import { defineProps, ref, watch } from 'vue';
-  import type { IComponentProps } from '../DynamicForm.vue';
+  import type { IComponentProps, IFormField } from '@/components/DynamicForm.vue';
   
   interface IAddressBoxConfig {
     // You can expand this interface to include more detailed configurations
   }
-  
-  type IAddressBoxProps = IComponentProps<{
+
+  type IAddressBoxData =  {
     street: string;
     city: string;
     state: string;
     postal: string;
-  }> & IAddressBoxConfig;
-  
-  const props = defineProps<IAddressBoxProps>();
+  }
+  export type IAddressBoxField = IFormField<IAddressBoxData,IAddressBoxConfig>;
+  const props = defineProps<IComponentProps<IAddressBoxData> & IAddressBoxConfig>();
   
   const internalModelValue = ref(props.modelValue ?? {});
   
   // Define emits
   const emit = defineEmits(["update:modelValue"]);
   
+  const err = ref();
+
   // Emit updates when any part of the address changes
   watch(internalModelValue, (newValue) => {
+    err.value = props.validate?.(newValue)
     emit('update:modelValue', newValue);
   }, { deep: true });
   

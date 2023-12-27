@@ -31,16 +31,14 @@
   
   <script lang="ts" setup>
 import { ref, watch, computed } from "vue";
-import type { IComponentProps } from "../DynamicForm.vue";
+import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
 export interface ISelectBoxConfig  {
     options: Array<{ label: string; value: string }>, 
 }
-
-type ISelectBoxProps = IComponentProps<string> & ISelectBoxConfig 
-
-// Define props with types
-const props = defineProps<ISelectBoxProps>();
+type ISelectBoxData = string;
+export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig>
+const props = defineProps<IComponentProps<ISelectBoxData> & ISelectBoxConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue"]);

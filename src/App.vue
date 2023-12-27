@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
+import type {IAddressBoxField } from "./components/form_components/AddressBox.vue"
 import type { ISelectBoxConfig } from "./components/form_components/SelectBox.vue";
-import DynamicForm, { type IFormStructure } from "./components/DynamicForm.vue";
+import DynamicForm, { type IFormStructure, type IFormField } from "./components/DynamicForm.vue";
+import type { ITextFieldField } from "./components/form_components/TextField.vue";
+import type { ISelectBoxField } from "./components/form_components/RadioBox.vue";
 
 const form: IFormStructure = {
   fields: [
@@ -30,7 +33,7 @@ const form: IFormStructure = {
         const regex = /^[0-9]{10,}$/;
         return regex.test(data) ? null : 'Invalid phone number';
       },
-    },
+    } as ITextFieldField,
     
     // Educational Background
     {
@@ -45,8 +48,8 @@ const form: IFormStructure = {
           { label: "Ph.D.", value: "phd" },
           { label: "Other", value: "other" },
         ],
-      } as ISelectBoxConfig,
-    },
+      },
+    } as ISelectBoxField,
     {
       component: "TextField",
       name: "university",
@@ -72,12 +75,17 @@ const form: IFormStructure = {
         const years = parseInt(data);
         return !isNaN(years) && years >= 0 ? null : 'Invalid number of years';
       },
-    },
+    } as ITextFieldField,
     {
       component: "AddressBox",
       name: "address",
       title: "Full Address",
-    },
+      validate(data) {
+        if(!(data.city && data.postal && data.state && data.street)){
+          return "cannot be empty"
+        }
+      },
+    } as IAddressBoxField,
 
     // // Additional Details
     // {

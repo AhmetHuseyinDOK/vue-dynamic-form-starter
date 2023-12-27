@@ -14,11 +14,13 @@
 </template>
   
   <script lang="ts" setup>
-import { defineProps, defineEmits, computed, ref } from "vue";
-import type { IComponentProps } from "../DynamicForm.vue";
+import { defineProps, defineEmits, ref } from "vue";
+import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
-// Define props with types
-const props = defineProps<IComponentProps<string>>();
+type ITextFieldData = string;
+type ITextFieldConfig = {};
+export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig> 
+const props = defineProps<IComponentProps<ITextFieldData> & ITextFieldConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue"]);
