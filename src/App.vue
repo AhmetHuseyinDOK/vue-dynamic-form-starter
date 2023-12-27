@@ -94,8 +94,11 @@ const form: IFormStructure = {
 };
 
 const data = ref({
-  name: "ahmet",
-  gender: "male"
+  full_name: "ahmet",
+  highest_education: "high_school",
+  address: {
+    "street": "Aleyna Sok"
+  }
 });
 </script>
 
