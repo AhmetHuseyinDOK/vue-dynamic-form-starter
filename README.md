@@ -10,7 +10,7 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 
 [x] Handle errors from server
 
-[ ] Fetch data from remote
+[x] Fetch data from remote
 
 [ ] Components with childs
 

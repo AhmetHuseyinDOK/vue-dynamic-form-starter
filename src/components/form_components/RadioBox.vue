@@ -24,7 +24,7 @@
   }
   type ISelectBoxData = string;
   type ISelectBoxError = string;
-  export type ISelectBoxField = IFormField<ISelectBoxData, IRadioBoxConfig, ISelectBoxError> 
+  export type IRadioBoxField = IFormField<ISelectBoxData, IRadioBoxConfig, ISelectBoxError> 
   const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & IRadioBoxConfig> ();
   
   const internalModelValue = ref(props.modelValue);

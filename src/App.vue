@@ -5,7 +5,7 @@ import type {IAddressBoxField } from "./components/form_components/AddressBox.vu
 import type { ISelectBoxConfig } from "./components/form_components/SelectBox.vue";
 import DynamicForm, { type IFormStructure, type IFormField } from "./components/DynamicForm.vue";
 import type { ITextFieldField } from "./components/form_components/TextField.vue";
-import type { ISelectBoxField } from "./components/form_components/RadioBox.vue";
+import type { ISelectBoxField } from "./components/form_components/SelectBox.vue";
 
 const form: IFormStructure = {
   fields: [
@@ -34,7 +34,29 @@ const form: IFormStructure = {
         return regex.test(data) ? null : 'Invalid phone number';
       },
     } as ITextFieldField,
-    
+    {
+      component: "SelectBox",
+      name: "nationality",
+      title: "Nationality",
+      config: {
+        query: async function (q){
+            //fake query
+            // can be improved
+            let data = await fetch('/countries.json').then( r => {
+             return r.json()
+            })
+            
+            if( q != null){
+             data=  data.filter( (d: any) => d.name.toLowerCase().includes(q.toLowerCase()) || d.code.toLowerCase().includes(q.toLowerCase()))
+            }
+            return data 
+            .map( (d: any) => ({
+              label: d.name,
+              value: d.code,
+            }))
+        } ,
+      },
+    } as ISelectBoxField,
     // Educational Background
     {
       component: "SelectBox",
@@ -109,7 +131,8 @@ const data = ref({
   highest_education: "phd",
   address: {
     "street": "Aleyna Sok"
-  }
+  },
+  nationality: "TR"
 });
 const errors = ref({});
 function fakeErrorResponse(){

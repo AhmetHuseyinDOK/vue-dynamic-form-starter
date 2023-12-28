@@ -7,6 +7,7 @@
       :name="name"
       type="text"
       v-model="searchQuery"
+      @keypress="search"
       @focus="isOpen = true"
       class="w-full px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
       :placeholder="title"
@@ -31,12 +32,16 @@
 </template>
   
   <script lang="ts" setup>
-import { ref, watch, computed } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
+type SelectBoxOption = { label: string; value: string };
+
 export interface ISelectBoxConfig  {
-    options: Array<{ label: string; value: string }>, 
+    options?: Array<SelectBoxOption>, 
+    query?: (q: string) => Promise<Array<SelectBoxOption>> 
 }
+
 type ISelectBoxData = string;
 type ISelectBoxError = string;
 export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig, ISelectBoxError>
@@ -45,17 +50,34 @@ const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & ISe
 // Define emits
 const emit = defineEmits(["update:modelValue", "update:error"]);
 
+// Computed property for filtered options
+const filteredOptions =  ref<SelectBoxOption[]>(props.options ?? []);
+
 // Reactive state
-const searchQuery = ref(getSelectedOptionFromValue(props.modelValue));
+const searchQuery = ref();
+onMounted(() => {
+  search().then(() => {
+    searchQuery.value =  getSelectedOptionFromValue(props.modelValue) ?? ""
+  });
+})
+
 const isOpen = ref(false);
 
-// Computed property for filtered options
-const filteredOptions = computed(() => {
-  if (!searchQuery.value || getSelectedOptionFromValue(searchQuery.value) == searchQuery.value) return props.options;
-  return props.options.filter((option) =>
-    option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
-  );
-});
+ async function search(){
+  if(props.options){
+    if (!searchQuery.value){
+      filteredOptions.value = props.options;
+    }else{
+      filteredOptions.value =  props.options.filter((option) =>
+      option.label.toLowerCase().includes(searchQuery.value.toLowerCase())
+    );
+    }
+  } else if(props.query) {
+    filteredOptions.value = await props.query(searchQuery.value);
+  } else{
+    throw "query or options must be defined"
+  }
+ }
 
 // Select option method
 const selectOption = (option: { label: string; value: string }) => {
@@ -65,15 +87,15 @@ const selectOption = (option: { label: string; value: string }) => {
   isOpen.value = false;
 };
 
-function getSelectedOptionFromValue(value: string): string {
-  return props.options.find((option) => option.value === value)?.label ?? "";
+function getSelectedOptionFromValue(value: string): string | undefined {
+  return filteredOptions.value.find((option) => option.value === value)?.label;
 }
 
 // Watch modelValue for external changes
 watch(
   () => props.modelValue,
   (newValue) => {
-    searchQuery.value = getSelectedOptionFromValue(newValue);
+    searchQuery.value =  getSelectedOptionFromValue(newValue) ?? ""
   }
 );
 </script>
