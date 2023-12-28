@@ -13,3 +13,5 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 [ ] Fetch data from remote
 
 [ ] Components with childs
+
+[] Visual Builder
