@@ -26,6 +26,7 @@
         </li>
       </ul>
     </div>
+    <div v-if="error" class="text-sm text-red-800">{{error}}</div>
   </div>
 </template>
   
@@ -42,7 +43,7 @@ export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig, ISele
 const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & ISelectBoxConfig>();
 
 // Define emits
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue", "update:error"]);
 
 // Reactive state
 const searchQuery = ref(getSelectedOptionFromValue(props.modelValue));
@@ -59,6 +60,7 @@ const filteredOptions = computed(() => {
 // Select option method
 const selectOption = (option: { label: string; value: string }) => {
   emit("update:modelValue", option.value);
+  emit("update:error", props.validate?.(option.value));
   searchQuery.value = option.label;
   isOpen.value = false;
 };

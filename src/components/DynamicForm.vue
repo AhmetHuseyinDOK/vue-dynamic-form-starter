@@ -9,6 +9,7 @@
       :title="field.title"
       :name="field.name"
       :validate="field.validate"
+      v-model:error="errors[field.name]"
       v-model="modelValue[field.name]"
     ></component>
   </form>
@@ -17,16 +18,18 @@
 interface Props {
   form: IFormStructure;
   modelValue: { [name: string]: any };
+  errors: {[name: string]: any}
 }
 
 export interface IFormStructure {
   fields: IFormField<any,any, any>[];
 }
 
-interface IBaseProps<T, Error> {
+interface IBaseProps<T, E> {
   title?: string;
+  error?: E;
   name: string;
-  validate?: (data: T) => Error | undefined
+  validate?: (data: T) => E | undefined
 }
 
 

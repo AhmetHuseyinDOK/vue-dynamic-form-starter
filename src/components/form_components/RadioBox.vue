@@ -11,6 +11,7 @@
         />
         <label :for="option.value">{{ option.label }}</label>
       </div>
+      <div v-if="error" class="text-sm text-red-800">{{error}}</div>
     </div>
   </template>
   
@@ -29,11 +30,12 @@
   const internalModelValue = ref(props.modelValue);
   
   // Define emits
-const emit = defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue","update:error"]);
 
   watch(internalModelValue, (newValue) => {
     // Emit an update:modelValue event whenever the internal model value changes
     // This ensures the parent component can use v-model with this component
+    emit("update:error", props.validate?.(newValue));
     emit('update:modelValue', newValue);
   });
   

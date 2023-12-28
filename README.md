@@ -8,7 +8,7 @@ I am looking for ways dynamically render forms for configurable forms from backe
 
 [ ] form-valid attribute
 
-[ ] Handle errors from server
+[x] Handle errors from server
 
 [ ] Fetch data from remote
 

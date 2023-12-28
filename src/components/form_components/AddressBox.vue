@@ -7,7 +7,7 @@
         v-model="internalModelValue.street"
         class="border p-2 rounded w-full mt-2"
       />
-      <div v-if="err?.street" class="text-sm text-red-800">{{err.street}}</div>
+      <div v-if="error?.street" class="text-sm text-red-800">{{error?.street}}</div>
       <label :for="`${name}-city`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - City</label>
       <input
         type="text"
@@ -15,7 +15,7 @@
         v-model="internalModelValue.city"
         class="border p-2 rounded  w-full mt-2"
       />
-      <div v-if="err?.city" class="text-sm text-red-800">{{err.city}}</div>
+      <div v-if="error?.city" class="text-sm text-red-800">{{error?.city}}</div>
       <label :for="`${name}-state`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - State</label>
       <input
         type="text"
@@ -23,7 +23,7 @@
         v-model="internalModelValue.state"
         class="border p-2 rounded  w-full mt-2"
       />
-      <div v-if="err?.state" class="text-sm text-red-800">{{err.state}}</div>
+      <div v-if="error?.state" class="text-sm text-red-800">{{error?.state}}</div>
       <label :for="`${name}-postal`" class="text-sm font-semibold text-gray-700 mt-2">{{ title }} - Postal Code</label>
       <input
         type="text"
@@ -31,7 +31,7 @@
         v-model="internalModelValue.postal"
         class="border p-2 rounded  w-full mt-2"
       />
-      <div v-if="err?.postal" class="text-sm text-red-800">{{err.postal}}</div>
+      <div v-if="error?.postal" class="text-sm text-red-800">{{error?.postal}}</div>
     </div>
     
   </template>
@@ -62,13 +62,11 @@
   const internalModelValue = ref(props.modelValue ?? {});
   
   // Define emits
-  const emit = defineEmits(["update:modelValue"]);
-  
-  const err = ref<IAddressBoxError>();
+  const emit = defineEmits(["update:modelValue","update:error"]);
 
   // Emit updates when any part of the address changes
   watch(internalModelValue, (newValue) => {
-    err.value = props.validate?.(newValue)
+    emit("update:error", props.validate?.(newValue))
     emit('update:modelValue', newValue);
   }, { deep: true });
   

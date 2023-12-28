@@ -9,12 +9,12 @@
       @input="updateValue"
       class="px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
     />
-    <div v-if="err" class="text-sm text-red-800">{{err}}</div>
+    <div v-if="error" class="text-sm text-red-800">{{error}}</div>
   </div>
 </template>
   
   <script lang="ts" setup>
-import { defineProps, defineEmits, ref } from "vue";
+import { defineProps, defineEmits, ref, watch } from "vue";
 import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
 type ITextFieldData = string;
@@ -24,15 +24,13 @@ export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig,ITextFi
 const props = defineProps<IComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
 
 // Define emits
-const emit = defineEmits(["update:modelValue"]);
-
-const err = ref()
+const emit = defineEmits(["update:modelValue","update:error"]);
 
 // Method to emit value update
 const updateValue = (event: Event) => {
   const inputElement = event.target as HTMLInputElement;
   const val = inputElement.value;
-  err.value = props.validate?.(val)
+  emit("update:error", props.validate?.(val))
   emit("update:modelValue", val);
 };
 

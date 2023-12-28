@@ -106,17 +106,37 @@ const form: IFormStructure = {
 
 const data = ref({
   full_name: "ahmet",
-  highest_education: "high_school",
+  highest_education: "phd",
   address: {
     "street": "Aleyna Sok"
   }
 });
+const errors = ref({});
+function fakeErrorResponse(){
+  setTimeout(() => {
+    console.log('set errors');
+    errors.value = {
+      phone_number: "Phone number must start with +90",
+      highest_education: data.value.highest_education == "high_school" ? "Are you one of those talented developers ?" : ""
+    }
+  }, 100)
+}
 </script>
 
 <template>
   <div class="max-w-2xl mx-auto p-10">
-    <dynamic-form :form="form" v-model="data"></dynamic-form>
-    {{ data }}
+    <dynamic-form :errors="errors" :form="form" v-model="data"></dynamic-form>
+    <button @click="fakeErrorResponse">submit</button>
+    <div class="grid grid-cols-2">
+      <code class="block">
+      {{ data }}
+    </code>
+    <code class="block">
+      {{ errors }}
+    </code>
+    </div>
+    
+    
   </div>
 </template>
 
