@@ -1,8 +1,7 @@
 <template>
-  <form>
     <component
       class="mt-2"
-      v-for="field in form.fields"
+      v-for="field in fields"
       :key="field.name"
       :is="field.component"
       v-bind="field.config"
@@ -11,17 +10,22 @@
       :validate="field.validate"
       v-model:error="errors[field.name]"
       v-model="modelValue[field.name]"
-    ></component>
-  </form>
+    >
+      <DynamicForm
+        v-if="field.children"
+        :errors="errors"
+        :modelValue="modelValue"
+        @update:modelValue="$emit('update:modelValue',$event)"
+        @update:errors="$emit('update:errors',$event)"
+        :fields="field.children"
+      >
+      </DynamicForm> 
+    </component>
 </template>
 <script setup lang="ts">
 interface Props {
-  form: IFormStructure;
   modelValue: { [name: string]: any };
   errors: {[name: string]: any}
-}
-
-export interface IFormStructure {
   fields: IFormField<any,any, any>[];
 }
 
@@ -29,6 +33,7 @@ interface IBaseProps<T, E> {
   title?: string;
   error?: E;
   name: string;
+  children?: IFormField<any,any,any>[];
   validate?: (data: T) => E | undefined
 }
 

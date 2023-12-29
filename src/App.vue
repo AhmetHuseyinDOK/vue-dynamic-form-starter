@@ -3,27 +3,36 @@ import { ref } from "vue";
 
 import type {IAddressBoxField } from "./components/form_components/AddressBox.vue"
 import type { ISelectBoxConfig } from "./components/form_components/SelectBox.vue";
-import DynamicForm, { type IFormStructure, type IFormField } from "./components/DynamicForm.vue";
+import DynamicForm, {  type IFormField } from "./components/DynamicForm.vue";
 import type { ITextFieldField } from "./components/form_components/TextField.vue";
 import type { ISelectBoxField } from "./components/form_components/SelectBox.vue";
 
-const form: IFormStructure = {
-  fields: [
+const form: IFormField<any,any,any>[] =  [
     // Personal Information
     {
-      component: "TextField",
-      name: "full_name",
-      title: "Full Name",
-      validate: (data) => data ? null : 'Full Name is required',
-    },
-    {
-      component: "TextField",
-      name: "email",
-      title: "Email Address",
-      validate: (data) => {
-        const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return regex.test(data) ? null : 'Invalid email format';
+      component: 'div',
+      name: 'full_name_container',
+      title: 'asd',
+      config: {
+        class: 'bg-yellow-400 p-4 rounded-md grid grid-cols-2 gap-2'
       },
+      children: [
+          {
+            component: "TextField",
+            name: "full_name",
+            title: "Full Name",
+            validate: (data) => data ? null : 'Full Name is required',
+          },
+          {
+            component: "TextField",
+            name: "email",
+            title: "Email Address",
+            validate: (data) => {
+              const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+              return regex.test(data) ? null : 'Invalid email format';
+            },
+          },
+        ]
     },
     {
       component: "TextField",
@@ -123,8 +132,7 @@ const form: IFormStructure = {
     //   name: "resume",
     //   title: "Upload Resume",
     // },
-  ],
-};
+  ];
 
 const data = ref({
   full_name: "ahmet",
@@ -134,7 +142,9 @@ const data = ref({
   },
   nationality: "TR"
 });
-const errors = ref({});
+const errors = ref<any>({
+  
+});
 function fakeErrorResponse(){
   setTimeout(() => {
     console.log('set errors');
@@ -148,7 +158,7 @@ function fakeErrorResponse(){
 
 <template>
   <div class="max-w-2xl mx-auto p-10">
-    <dynamic-form :errors="errors" :form="form" v-model="data"></dynamic-form>
+    <dynamic-form :errors="errors" :fields="form" v-model="data"></dynamic-form>
     <button @click="fakeErrorResponse">submit</button>
     <div class="grid grid-cols-2">
       <code class="block">
