@@ -27,12 +27,12 @@
         </li>
       </ul>
     </div>
-    <div v-if="err[props.name]" class="text-sm text-red-800">{{err[props.name]}}</div>
+    <div v-if="error" class="text-sm text-red-800">{{error}}</div>
   </div>
 </template>
   
   <script lang="ts" setup>
-import { ref, watch, onMounted, inject } from "vue";
+import { ref, watch, computed, onMounted } from "vue";
 import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
 type SelectBoxOption = { label: string; value: string };
@@ -47,8 +47,8 @@ type ISelectBoxError = string;
 export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig, ISelectBoxError>
 const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & ISelectBoxConfig>();
 
-const data = inject<any>(props.dataKey)
-const err = inject<any>(props.errorKey)
+// Define emits
+const emit = defineEmits(["update:modelValue", "update:error"]);
 
 // Computed property for filtered options
 const filteredOptions =  ref<SelectBoxOption[]>(props.options ?? []);
@@ -57,7 +57,7 @@ const filteredOptions =  ref<SelectBoxOption[]>(props.options ?? []);
 const searchQuery = ref();
 onMounted(() => {
   search().then(() => {
-    searchQuery.value =  getSelectedOptionFromValue(data[props.name]) ?? ""
+    searchQuery.value =  getSelectedOptionFromValue(props.modelValue) ?? ""
   });
 })
 
@@ -81,8 +81,8 @@ const isOpen = ref(false);
 
 // Select option method
 const selectOption = (option: { label: string; value: string }) => {
-  data[props.name] = option.value;
-  err[props.name] = props.validate?.(option.value)
+  emit("update:modelValue", option.value);
+  emit("update:error", props.validate?.(option.value));
   searchQuery.value = option.label;
   isOpen.value = false;
 };
@@ -93,7 +93,7 @@ function getSelectedOptionFromValue(value: string): string | undefined {
 
 // Watch modelValue for external changes
 watch(
-  () => data[props.name],
+  () => props.modelValue,
   (newValue) => {
     searchQuery.value =  getSelectedOptionFromValue(newValue) ?? ""
   }

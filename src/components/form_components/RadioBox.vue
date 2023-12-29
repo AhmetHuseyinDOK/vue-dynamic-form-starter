@@ -7,16 +7,16 @@
           :value="option.value"
           :id="option.value"
           :name="name"
-          v-model="data[props.name]"
+          v-model="internalModelValue"
         />
         <label :for="option.value">{{ option.label }}</label>
       </div>
-      <div v-if="err[props.name]" class="text-sm text-red-800">{{err[props.name]}}</div>
+      <div v-if="error" class="text-sm text-red-800">{{error}}</div>
     </div>
   </template>
   
   <script setup lang="ts">
-  import { defineProps, inject } from 'vue';
+  import { defineProps, watch, ref } from 'vue';
   import type { IComponentProps, IFormField } from '../DynamicForm.vue';
   
   interface IRadioBoxConfig {
@@ -27,8 +27,24 @@
   export type IRadioBoxField = IFormField<ISelectBoxData, IRadioBoxConfig, ISelectBoxError> 
   const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & IRadioBoxConfig> ();
   
-  const data = inject<any>(props.dataKey)
-  const err = inject<any>(props.errorKey)
+  const internalModelValue = ref(props.modelValue);
   
+  // Define emits
+const emit = defineEmits(["update:modelValue","update:error"]);
+
+  watch(internalModelValue, (newValue) => {
+    // Emit an update:modelValue event whenever the internal model value changes
+    // This ensures the parent component can use v-model with this component
+    emit("update:error", props.validate?.(newValue));
+    emit('update:modelValue', newValue);
+  });
+  
+  // Watch for external changes to modelValue prop and update internal state accordingly
+  watch(
+    () => props.modelValue,
+    (newVal) => {
+      internalModelValue.value = newVal;
+    }
+  );
   </script>
   

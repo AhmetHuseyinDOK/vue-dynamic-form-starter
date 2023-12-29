@@ -5,16 +5,16 @@
     }}</label>
     <input
       :id="name"
-      v-model="data[props.name]"
-      @input="err[props.name] = validate?.(data[props.name])"
+      :value="modelValue"
+      @input="updateValue"
       class="px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
     />
-    <div v-if="err[props.name]" class="text-sm text-red-800">{{err[props.name]}}</div>
+    <div v-if="error" class="text-sm text-red-800">{{error}}</div>
   </div>
 </template>
   
-<script lang="ts" setup>
-import { defineProps, inject} from "vue";
+  <script lang="ts" setup>
+import { defineProps, defineEmits, ref, watch } from "vue";
 import type { IComponentProps, IFormField } from "../DynamicForm.vue";
 
 type ITextFieldData = string;
@@ -23,12 +23,21 @@ type ITextFieldError = string;
 export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig,ITextFieldError > 
 const props = defineProps<IComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
 
-const data = inject<any>(props.dataKey)
-const err = inject<any>(props.errorKey)
+// Define emits
+const emit = defineEmits(["update:modelValue","update:error"]);
+
+// Method to emit value update
+const updateValue = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const val = inputElement.value;
+  emit("update:error", props.validate?.(val))
+  emit("update:modelValue", val);
+};
+
 
 </script>
   
-<style scoped>
+  <style scoped>
 /* Add your CSS styling here */
 </style>
   

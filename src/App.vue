@@ -1,13 +1,11 @@
 <script setup lang="ts">
-import { ref, provide, reactive } from "vue";
+import { ref } from "vue";
 
 import type {IAddressBoxField } from "./components/form_components/AddressBox.vue"
 import type { ISelectBoxConfig } from "./components/form_components/SelectBox.vue";
 import DynamicForm, { type IFormStructure, type IFormField } from "./components/DynamicForm.vue";
 import type { ITextFieldField } from "./components/form_components/TextField.vue";
 import type { ISelectBoxField } from "./components/form_components/SelectBox.vue";
-import type SelectBoxVue from "./components/form_components/SelectBox.vue";
-import TextField from "./components/form_components/TextField.vue";
 
 const form: IFormStructure = {
   fields: [
@@ -128,7 +126,7 @@ const form: IFormStructure = {
   ],
 };
 
-const data = reactive({
+const data = ref({
   full_name: "ahmet",
   highest_education: "phd",
   address: {
@@ -136,27 +134,21 @@ const data = reactive({
   },
   nationality: "TR"
 });
-
-provide('data',data)
-
-const errors = reactive({});
-
-provide('errors', errors);
+const errors = ref({});
 function fakeErrorResponse(){
   setTimeout(() => {
     console.log('set errors');
-    Object.assign(errors ,{
+    errors.value = {
       phone_number: "Phone number must start with +90",
-      highest_education: data.highest_education == "high_school" ? "Are you one of those talented developers ?" : ""
-    })
+      highest_education: data.value.highest_education == "high_school" ? "Are you one of those talented developers ?" : ""
+    }
   }, 100)
 }
-
 </script>
 
 <template>
   <div class="max-w-2xl mx-auto p-10">
-    <dynamic-form data-key="data" error-key="errors" :form="form" ></dynamic-form>
+    <dynamic-form :errors="errors" :form="form" v-model="data"></dynamic-form>
     <button @click="fakeErrorResponse">submit</button>
     <div class="grid grid-cols-2">
       <code class="block">
