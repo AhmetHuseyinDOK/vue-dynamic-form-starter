@@ -14,4 +14,8 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 
 [x] Components with childs
 
+[] DateTime Component
+
+[] Documentation
+
 [] Visual Builder
