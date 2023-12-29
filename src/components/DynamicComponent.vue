@@ -8,10 +8,10 @@
       :title="field.title"
       :name="field.name"
       :validate="field.validate"
-      v-model:error="errors[field.name]"
-      v-model="modelValue[field.name]"
+      v-model:error="errors[field.name!]"
+      v-model="modelValue[field.name!]"
     >
-      <DynamicForm
+      <DynamicComponent
         v-if="field.children"
         :errors="errors"
         :modelValue="modelValue"
@@ -19,7 +19,7 @@
         @update:errors="$emit('update:errors',$event)"
         :fields="field.children"
       >
-      </DynamicForm> 
+      </DynamicComponent> 
     </component>
 </template>
 <script setup lang="ts">
@@ -32,7 +32,7 @@ interface Props {
 interface IBaseProps<T, E> {
   title?: string;
   error?: E;
-  name: string;
+  name?: string;
   children?: IFormField<any,any,any>[];
   validate?: (data: T) => E | undefined
 }

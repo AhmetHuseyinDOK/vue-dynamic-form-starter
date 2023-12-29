@@ -15,7 +15,7 @@
   
   <script lang="ts" setup>
 import { defineProps, defineEmits, ref, watch } from "vue";
-import type { IComponentProps, IFormField } from "../DynamicForm.vue";
+import type { IComponentProps, IFormField } from "../DynamicComponent.vue";
 
 type ITextFieldData = string;
 type ITextFieldConfig = {};

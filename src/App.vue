@@ -2,19 +2,18 @@
 import { ref } from "vue";
 
 import type {IAddressBoxField } from "./components/form_components/AddressBox.vue"
-import type { ISelectBoxConfig } from "./components/form_components/SelectBox.vue";
-import DynamicForm, {  type IFormField } from "./components/DynamicForm.vue";
+import DynamicComponent, {  type IFormField } from "./components/DynamicComponent.vue";
 import type { ITextFieldField } from "./components/form_components/TextField.vue";
 import type { ISelectBoxField } from "./components/form_components/SelectBox.vue";
+import TextField from "./components/form_components/TextField.vue";
+
 
 const form: IFormField<any,any,any>[] =  [
     // Personal Information
     {
       component: 'div',
-      name: 'full_name_container',
-      title: 'asd',
       config: {
-        class: 'bg-yellow-400 p-4 rounded-md grid grid-cols-2 gap-2'
+        class: 'grid grid-cols-2 gap-2'
       },
       children: [
           {
@@ -32,40 +31,41 @@ const form: IFormField<any,any,any>[] =  [
               return regex.test(data) ? null : 'Invalid email format';
             },
           },
+          {
+            component: "TextField",
+            name: "phone_number",
+            title: "Phone Number",
+            validate: (data) => {
+              const regex = /^[0-9]{10,}$/;
+              return regex.test(data) ? null : 'Invalid phone number';
+            },
+          } as ITextFieldField,
+          {
+            component: "SelectBox",
+            name: "nationality",
+            title: "Nationality",
+            config: {
+              query: async function (q){
+                  //fake query
+                  // can be improved
+                  let data = await fetch('/countries.json').then( r => {
+                  return r.json()
+                  })
+                  
+                  if( q != null){
+                  data=  data.filter( (d: any) => d.name.toLowerCase().includes(q.toLowerCase()) || d.code.toLowerCase().includes(q.toLowerCase()))
+                  }
+                  return data 
+                  .map( (d: any) => ({
+                    label: d.name,
+                    value: d.code,
+                  }))
+              } ,
+            },
+          } as ISelectBoxField,
         ]
     },
-    {
-      component: "TextField",
-      name: "phone_number",
-      title: "Phone Number",
-      validate: (data) => {
-        const regex = /^[0-9]{10,}$/;
-        return regex.test(data) ? null : 'Invalid phone number';
-      },
-    } as ITextFieldField,
-    {
-      component: "SelectBox",
-      name: "nationality",
-      title: "Nationality",
-      config: {
-        query: async function (q){
-            //fake query
-            // can be improved
-            let data = await fetch('/countries.json').then( r => {
-             return r.json()
-            })
-            
-            if( q != null){
-             data=  data.filter( (d: any) => d.name.toLowerCase().includes(q.toLowerCase()) || d.code.toLowerCase().includes(q.toLowerCase()))
-            }
-            return data 
-            .map( (d: any) => ({
-              label: d.name,
-              value: d.code,
-            }))
-        } ,
-      },
-    } as ISelectBoxField,
+    
     // Educational Background
     {
       component: "SelectBox",
@@ -154,11 +154,18 @@ function fakeErrorResponse(){
     }
   }, 100)
 }
+
+const textFieldData = ref()
+const err = ref();
 </script>
 
 <template>
   <div class="max-w-2xl mx-auto p-10">
-    <dynamic-form :errors="errors" :fields="form" v-model="data"></dynamic-form>
+    <!-- example standalone usage of component -->
+    <text-field v-model:error="err" v-model="textFieldData" :validate="(val) => !val ? 'cannot be empty standalone' : undefined" :name="'test'"></text-field>
+    
+    <!-- example usage of dynamic form component -->
+    <dynamic-component :errors="errors" :fields="form" v-model="data"></dynamic-component>
     <button @click="fakeErrorResponse">submit</button>
     <div class="grid grid-cols-2">
       <code class="block">

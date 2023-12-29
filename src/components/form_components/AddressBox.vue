@@ -38,7 +38,7 @@
   
   <script setup lang="ts">
   import { defineProps, ref, watch } from 'vue';
-  import type { IComponentProps, IFormField } from '@/components/DynamicForm.vue';
+  import type { IComponentProps, IFormField } from '@/components/DynamicComponent.vue';
   
   interface IAddressBoxConfig {
     // You can expand this interface to include more detailed configurations

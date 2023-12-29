@@ -33,7 +33,7 @@
   
   <script lang="ts" setup>
 import { ref, watch, computed, onMounted } from "vue";
-import type { IComponentProps, IFormField } from "../DynamicForm.vue";
+import type { IComponentProps, IFormField } from "../DynamicComponent.vue";
 
 type SelectBoxOption = { label: string; value: string };
 
