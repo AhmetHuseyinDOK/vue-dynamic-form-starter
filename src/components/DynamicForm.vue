@@ -9,16 +9,17 @@
       :title="field.title"
       :name="field.name"
       :validate="field.validate"
-      v-model:error="errors[field.name]"
-      v-model="modelValue[field.name]"
-    ></component>
+      :data-key="dataKey"
+      :error-key="errorKey"
+    >
+  </component>
   </form>
 </template>
 <script setup lang="ts">
 interface Props {
   form: IFormStructure;
-  modelValue: { [name: string]: any };
-  errors: {[name: string]: any}
+  dataKey: string;
+  errorKey: string;
 }
 
 export interface IFormStructure {
@@ -27,14 +28,14 @@ export interface IFormStructure {
 
 interface IBaseProps<T, E> {
   title?: string;
-  error?: E;
   name: string;
+  children?: IFormField<any,any,any>[]
   validate?: (data: T) => E | undefined
 }
 
-
 export type IComponentProps<Data,Error> = IBaseProps<Data,Error> & {
-  modelValue: Data;
+  dataKey: string;
+  errorKey: string;
 }
 
 export interface IFormField<Data,Config,Error> extends IBaseProps<Data,Error> {
