@@ -16,6 +16,8 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 
 [] DateTime Component
 
+[] File Upload
+
 [] Documentation
 
 [] Visual Builder
