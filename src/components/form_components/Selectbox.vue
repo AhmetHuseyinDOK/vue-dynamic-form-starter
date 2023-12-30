@@ -33,7 +33,7 @@
   
   <script lang="ts" setup>
 import { ref, watch, computed, onMounted } from "vue";
-import type { IComponentProps, IFormField } from "../DynamicComponent.vue";
+import type { IInputComponentProps, IInputField } from "../DynamicComponent.vue";
 
 type SelectBoxOption = { label: string; value: string };
 
@@ -44,8 +44,8 @@ export interface ISelectBoxConfig  {
 
 type ISelectBoxData = string;
 type ISelectBoxError = string;
-export type ISelectBoxField = IFormField<ISelectBoxData, ISelectBoxConfig, ISelectBoxError>
-const props = defineProps<IComponentProps<ISelectBoxData, ISelectBoxError> & ISelectBoxConfig>();
+export type ISelectBoxField = IInputField<ISelectBoxData, ISelectBoxConfig, ISelectBoxError>
+const props = defineProps<IInputComponentProps<ISelectBoxData, ISelectBoxError> & ISelectBoxConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue", "update:error"]);

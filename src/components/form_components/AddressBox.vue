@@ -38,7 +38,7 @@
   
   <script setup lang="ts">
   import { defineProps, ref, watch } from 'vue';
-  import type { IComponentProps, IFormField } from '@/components/DynamicComponent.vue';
+  import type { IInputComponentProps, IInputField } from '@/components/DynamicComponent.vue';
   
   interface IAddressBoxConfig {
     // You can expand this interface to include more detailed configurations
@@ -56,8 +56,8 @@
     state: string;
     postal: string;
   }
-  export type IAddressBoxField = IFormField<IAddressBoxData,IAddressBoxConfig, IAddressBoxError>;
-  const props = defineProps<IComponentProps<IAddressBoxData,IAddressBoxError> & IAddressBoxConfig>();
+  export type IAddressBoxField = IInputField<IAddressBoxData,IAddressBoxConfig, IAddressBoxError>;
+  const props = defineProps<IInputComponentProps<IAddressBoxData,IAddressBoxError> & IAddressBoxConfig>();
   
   const internalModelValue = ref(props.modelValue ?? {});
   

@@ -7,6 +7,8 @@
       :id="name"
       :value="modelValue"
       @input="updateValue"
+      :type="type"
+      :placeholder="placeholder"
       class="px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
     />
     <div v-if="error" class="text-sm text-red-800">{{error}}</div>
@@ -14,14 +16,16 @@
 </template>
   
   <script lang="ts" setup>
-import { defineProps, defineEmits, ref, watch } from "vue";
-import type { IComponentProps, IFormField } from "../DynamicComponent.vue";
+import { defineProps, defineEmits, ref, watch, type InputTypeHTMLAttribute } from "vue";
+import type { IInputComponentProps, IInputField } from "../DynamicComponent.vue";
 
 type ITextFieldData = string;
-type ITextFieldConfig = {};
+type ITextFieldConfig = {
+  type?: InputTypeHTMLAttribute
+};
 type ITextFieldError = string;
-export type ITextFieldField = IFormField<ITextFieldData,ITextFieldConfig,ITextFieldError > 
-const props = defineProps<IComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
+export type ITextFieldField = IInputField<ITextFieldData,ITextFieldConfig,ITextFieldError > 
+const props = defineProps<IInputComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
 
 // Define emits
 const emit = defineEmits(["update:modelValue","update:error"]);
