@@ -17,15 +17,15 @@ import { ref } from 'vue';
 
 const links = ref([
     {
-        href: '/examples/simple-form',
+        href: '/vue-dynamic-form-starter' + '/examples/simple-form',
         title: 'Login Form'
     },
     {
-        href: '/examples/complex-form',
+        href: '/vue-dynamic-form-starter' + '/examples/complex-form',
         title: 'Application Form'
     },
     {
-        href: '/examples/post-publish',
+        href: '/vue-dynamic-form-starter' + '/examples/post-publish',
         title: 'Post Publish'
     }
 ]);
