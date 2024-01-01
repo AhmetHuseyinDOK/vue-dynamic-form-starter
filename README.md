@@ -6,7 +6,7 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 
 ## RoadMap
 
-[ ] form-valid attribute
+[x] form-valid utility
 
 [x] Handle errors from server
 
@@ -15,6 +15,8 @@ I am looking for ways to dynamically render forms for configurable forms from ba
 [x] Components with childs
 
 [] DateTime Component
+
+[] File Upload
 
 [] Documentation
 
