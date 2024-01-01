@@ -1,0 +1,1 @@
+function f(t,i,e){for(const n of t)"validate"in n&&(e[n.name]=n.validate(i[n.name])),"children"in n&&f(n.children,i,e)}function a(t,i,e){return f(t,i,e),l(e)}function l(t){for(const i of Object.values(t))if(typeof i=="object"&&!l(i)||i!=null)return!1;return!0}export{a as i};
