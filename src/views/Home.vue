@@ -18,11 +18,15 @@ import { ref } from 'vue';
 const links = ref([
     {
         href: '/examples/simple-form',
-        title: 'Simple Form'
+        title: 'Login Form'
     },
     {
         href: '/examples/complex-form',
-        title: 'Complex Form'
+        title: 'Application Form'
+    },
+    {
+        href: '/examples/post-publish',
+        title: 'Post Publish'
     }
 ]);
 </script>
