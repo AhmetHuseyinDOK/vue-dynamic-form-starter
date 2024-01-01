@@ -6,7 +6,7 @@ import DynamicComponent, {  type IField, type IInputField, type IPlainField } fr
 import type { ITextFieldField } from "../../components/form_components/TextField.vue";
 import type { ISelectBoxField } from "../../components/form_components/SelectBox.vue";
 import TextField from "../../components/form_components/TextField.vue";
-
+import JsonPreview from "@/components/JsonPreview.vue";
 
 const form: IField<any>[] =  [
     // Personal Information
@@ -154,28 +154,25 @@ function fakeErrorResponse(){
     }
   }, 100)
 }
-
-const textFieldData = ref()
-const err = ref();
 </script>
 
 <template>
-  <div class="max-w-2xl mx-auto p-10">
-    <!-- example standalone usage of component -->
-    <text-field v-model:error="err" v-model="textFieldData" :validate="(val) => !val ? 'cannot be empty standalone' : undefined" :name="'test'"></text-field>
-    
     <!-- example usage of dynamic form component -->
-    <dynamic-component :errors="errors" :fields="form" v-model="data"></dynamic-component>
-    <button @click="fakeErrorResponse">submit</button>
     <div class="grid grid-cols-2">
-      <code class="block">
-      {{ data }}
-    </code>
-    <code class="block">
-      {{ errors }}
-    </code>
-    </div>
-    
+    <form class="p-4 h-screen overflow-scroll">
+      <dynamic-component :errors="errors" v-model="data" :fields="form"></dynamic-component>
+      <button class="bg-blue-600 mt-2 px-5 py-2 rounded-md text-white font-medium w-full" @click.prevent="fakeErrorResponse">Login</button>
+    </form>
+    <div class="grid grid-rows-2 gap-2">
+      <div>
+        <h1 class="font-medium mb-2">Data</h1>
+        <json-preview  :json="data"></json-preview>
+      </div>
+      <div>
+        <h1 class="font-medium mb-2">Error</h1>
+        <json-preview :json="errors"></json-preview>
+      </div>
+    </div>  
     
   </div>
 </template>

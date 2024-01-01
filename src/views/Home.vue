@@ -1,10 +1,28 @@
 
 <template>
-    <h1>Examples</h1>
-    <a href="/examples/simple-form">Simple Form</a>
-    <a href="/examples/complex-form">Complex Form</a>
+<div class="h-screen w-screen flex justify-center items-center bg-slate-100">
+    <div class="bg-white p-4 rounded-md">   
+        <h1 class="text-center text-lg font-bold">Vue Dynamic</h1>
+        <ul class="text-center">
+           <li v-for="link in links" ><a class="bg-blue-400 block rounded-sm hover:bg-blue-600 mt-2 p-3 text-blue-950 font-bold" :href="link.href">{{link.title}}</a></li> 
+        </ul>
+        
+        
+    </div>
+</div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue';
 
+const links = ref([
+    {
+        href: '/examples/simple-form',
+        title: 'Simple Form'
+    },
+    {
+        href: '/examples/complex-form',
+        title: 'Complex Form'
+    }
+]);
 </script>
