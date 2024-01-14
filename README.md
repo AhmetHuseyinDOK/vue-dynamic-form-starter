@@ -14,6 +14,13 @@ Features:
 
 ## How to render components dynamically
 
+- enable components globally
+
+```ts
+// main.ts
+app.component('TextField', TextField);
+```
+
 - import DynamicComponent.vue
 
 ```vue
