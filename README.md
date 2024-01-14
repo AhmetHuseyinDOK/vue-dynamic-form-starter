@@ -12,6 +12,81 @@ Features:
 - Use your **own components**
 - Write components that can be also used **outside of dynamic form**
 
+## How to render components dynamically
+
+- import DynamicComponent.vue
+
+```vue
+<script setup lang="ts">
+import DynamicComponent, { type IField } from '../../components/DynamicComponent.vue';
+</script>
+```
+- Define data and error variables as reactive
+
+```vue
+<script setup lang="ts">
+import DynamicComponent, { type IField } from '../../components/DynamicComponent.vue';
+import { reactive } from 'vue';
+
+const data = reactive({});
+const errors = reactive({});
+
+</script>
+```
+-  we will define fields, to get started let's import respective field type
+
+
+```vue
+<script setup lang="ts">
+
+import DynamicComponent, { type IField } from '../../components/DynamicComponent.vue';
+import { reactive } from 'vue';
+
+// field type for better intellisense 
+import type { ITextFieldField } from '@/components/form_components/TextField.vue';
+
+const data = reactive({});
+const errors = reactive({});
+
+</script>
+
+```
+
+- let's define fields
+
+```vue
+
+<script setup lang="ts">
+
+import DynamicComponent, { type IField } from '../../components/DynamicComponent.vue';
+import { reactive } from 'vue';
+
+// field type for better intellisense 
+import type { ITextFieldField } from '@/components/form_components/TextField.vue';
+
+const data = reactive({});
+const errors = reactive({});
+
+// this is the most basic implementation of field list
+const fields: IField<any>[] = [
+  {
+    component: 'TextField',
+    name: 'email',
+    title: 'Email',
+  } as ITextFieldField,
+]
+
+</script>
+```
+
+- let's use configurations in the template
+
+```vue
+<template>
+      <dynamic-component :errors="errors" v-model="data" :fields="fields"></dynamic-component>     
+</template>
+```
+
 ## How to write a dynamic form compatible components
 
 **Every input must implement v-model and v-model:error** this can be achived by the following implementation;
