@@ -14,12 +14,18 @@ Features:
 
 ## How to write a dynamic form compatible components
 
+**Every input must implement v-model and v-model:error** this can be achived by the following implementation;
+
 First we need to define 3 things
 - v-model type
 - error type
 - extra props
 
-```ts
+
+Let's start with a basic text field example;
+
+```vue
+<script setup lang="ts">
 import { defineProps, defineEmits, type InputTypeHTMLAttribute } from "vue";
 import type { IInputComponentProps, IInputField } from "../DynamicComponent.vue";
 
@@ -60,12 +66,39 @@ export type ITextFieldField = IInputField<ITextFieldData,ITextFieldConfig,ITextF
  */
 const props = defineProps<IInputComponentProps<ITextFieldData, ITextFieldError> & ITextFieldConfig>();
 
+// Let's define emits for modelValue and error
+const emit = defineEmits(["update:modelValue","update:error"]);
+
+// Method to emit value update
+const updateValue = (event: Event) => {
+  const inputElement = event.target as HTMLInputElement;
+  const val = inputElement.value;
+  emit("update:error", props.validate?.(val))
+  emit("update:modelValue", val);
+};
+</script>
+<template>
+  <div class="flex flex-col gap-2">
+    <label :for="name" class="text-sm font-semibold text-gray-700">{{
+      title
+    }}</label>
+    <input
+      :id="name"
+      :value="modelValue"
+      @input="updateValue"
+      :type="type"
+      :placeholder="placeholder"
+      class="px-4 py-2 border rounded-md shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+    />
+    <div v-if="error" class="text-sm text-red-800">{{error}}</div>
+  </div>
+</template>
 ```
 
 
 ## Get Started
 
-You can simple clone this repo and tweak examples.
+You can simply clone this repo and tweak examples.
 
 ## RoadMap
 
